@@ -13,6 +13,8 @@
   "dependencies": {
     "@expo/react-native-image-gallery": "^2.2.0",
     "@expo/react-native-touchable-native-feedback-safe": "^1.1.2",
+    "aws-amplify": "^1.1.30",
+    "aws-amplify-react-native": "^2.1.14",
     "babel-plugin-transform-remove-console": "^6.9.1",
     "base-64": "^0.1.0",
     "eslint-plugin-flowtype": "^2.46.3",
