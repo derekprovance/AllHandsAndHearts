@@ -1,5 +1,4 @@
 import { InteractionManager } from 'react-native';
-import * as AuthService from '../services/auth';
 
 /**
  * Returns children from either a function or children
@@ -24,7 +23,7 @@ export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 export const delayExec = (ms, func) =>
   new Promise(resolve => {
     setTimeout(() => {
-      resolve(func());
+      resolveconnect(func());
     }, ms);
   });
 export class SalesforceApiWrapper {

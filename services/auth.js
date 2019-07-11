@@ -9,53 +9,6 @@ bcrypt.setRandomFallback(len => {
   const buf = new Uint8Array(len);
   return buf.map(() => Math.floor(isaac.random() * 256));
 });
-export const generateSalt = username => {
-  const bytes = [];
-  for (let i = 0; i < username.length; i++) {
-    bytes.push(username.charCodeAt(i));
-  }
-  while (bytes.length < 16) {
-    bytes.push(0);
-  }
-  const salt = base64.encode(
-    String.fromCharCode.apply(String, bytes.slice(0, 16))
-  );
-  return `$2a$10$${salt}`;
-};
-
-export const generatePasswordHash = (username, password) => {
-  return new Promise((resolve, reject) => {
-    if (username && password) {
-      // this is the salt we create
-      //given the same pass this will always return same salt
-      const usernameSalt = generateSalt(username);
-      bcrypt.hash(password, usernameSalt, (err, passwordHash) => {
-        if (err) resolve(new Error(err));
-        resolve(passwordHash);
-      });
-    } else {
-      resolve('');
-    }
-  });
-};
-/*
-export const encryptPayload = payload => {
-  const ciphertext = CryptoJS.AES.encrypt(payload, SF_AES_256_KEY);
-  /*console.log(
-    JSON.stringify({
-      key: ciphertext.key.toString(CryptoJS.enc.Base64),
-      iv: ciphertext.iv.toString(CryptoJS.enc.Base64),
-      ciphertext: ciphertext.ciphertext.toString(CryptoJS.enc.Base64)
-    })
-  );
-  const c = CryptoJS.AES.decrypt(ciphertext.toString(), SF_AES_256_KEY);
-  //console.log(c.toString(CryptoJS.enc.Utf8));
-  //console.log(ciphertext.toString());
-  return {
-    iv: ciphertext.iv.toString(CryptoJS.enc.Base64),
-    ciphertext: ciphertext.ciphertexttoString(CryptoJS.enc.Base64)
-  };
-};*/
 
 // value is of type object, but set as string since AsyncStorage only support strings
 export const setCookie = value =>

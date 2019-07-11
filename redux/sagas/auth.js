@@ -18,7 +18,6 @@ import {
   CHANGE_PASSWORD_STATUS_RESET,
   LOGOUT_REQUEST_SUCCESS
 } from '../actions/actionTypes';
-import * as AuthService from '../../services/auth';
 import { purgeStoredState } from 'redux-persist';
 import ApiWrapper from '../../services/api';
 import persistConfig from '../persistConfig';
@@ -34,15 +33,20 @@ const authorize = function* authorize({
   isRegistering = false
 }) {
   try {
-    const hash = yield call(AuthService.generatePasswordHash, email, password);
     yield put({
       type: REGISTER_PUSH_NOTIFICATION
     });
     let response;
     if (isRegistering) {
-      response = yield call(Api.register, email, hash, name, securityQuestion);
+      response = yield call(
+        Api.register,
+        email,
+        password,
+        name,
+        securityQuestion
+      );
     } else {
-      response = yield call(Api.login, email, hash, securityQuestion);
+      response = yield call(Api.login, email, password);
     }
     return response;
   } catch (error) {
@@ -72,12 +76,13 @@ function* loginFlow(action) {
       securityQuestion,
       isRegistering: false
     });
-    if (auth && typeof auth === 'object' && auth.Id) {
+    //TODO need to consider saving the token here
+    if (auth && typeof auth === 'object' && auth.attributes) {
       yield put({
         type: SET_AUTH,
         newAuthState: true,
-        currentUserId: auth.Id,
-        user: auth
+        currentUserId: auth.attributes.email,
+        user: auth.attributes
       });
       yield put({ type: RESET_TO_MAIN });
     } else {
@@ -174,13 +179,8 @@ function* initializeAppState(action) {
 function* changePasswordFlow(action) {
   try {
     const { email, newPassword } = action.data;
-    const newHash = yield call(
-      AuthService.generatePasswordHash,
-      email,
-      newPassword
-    );
-    if (email && newHash) {
-      const status = yield call(Api.changePassword, email, newHash);
+    if (email) {
+      const status = yield call(Api.changePassword, email, newPassword);
       if (status['Email__c']) {
         yield put({
           type: CHANGE_PASSWORD_SUCCESS,

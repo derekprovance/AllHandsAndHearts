@@ -6,8 +6,6 @@ import { AlertProvider } from './containers/AlertContainer';
 import createStore from './redux';
 const { store, persistor } = createStore();
 import Amplify from '@aws-amplify/core';
-import Auth from '@aws-amplify/auth';
-import { withAuthenticator } from 'aws-amplify-react-native';
 
 Amplify.configure({
   Auth: {
@@ -20,7 +18,7 @@ Amplify.configure({
   }
 });
 
-class App extends React.PureComponent {
+export default class App extends React.PureComponent {
   render() {
     return (
       <Provider store={store}>
@@ -33,5 +31,3 @@ class App extends React.PureComponent {
     );
   }
 }
-
-export default withAuthenticator(App);

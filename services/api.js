@@ -1,6 +1,8 @@
 import { SalesforceApiWrapper } from '../utils/utils';
 import * as AuthService from './auth';
+import { Auth } from 'aws-amplify';
 const SalesforceApi = new SalesforceApiWrapper();
+
 export default class Api {
   /**
    * Region related Apis
@@ -114,33 +116,28 @@ export default class Api {
   /**
    * Auth specific Apis
    */
-  login = async (email, passwordHash, securityQuestion) => {
-    //PUT is login
-    const queryEndpoint = '/users';
-    const payload = {
-      email: email,
-      password: passwordHash,
-      securityQuestion: securityQuestion
-    };
-    return await SalesforceApi.put(queryEndpoint, payload);
+  login = async (email, password) => {
+    return await Auth.signIn(email, password)
+      .then(success => success)
+      .catch(err => console.log(err));
   };
 
-  register = async (email, hash, name, securityQuestion) => {
+  register = async (email, password, name, securityQuestion) => {
     const queryEndpoint = '/users';
     const payload = {
       email,
       name,
-      password: hash,
+      password: password,
       securityQuestion
     };
     return await SalesforceApi.post(queryEndpoint, payload);
   };
 
-  changePassword = async (email, newHash) => {
+  changePassword = async (email, password) => {
     const queryEndpoint = '/changePassword';
     const payload = {
       email,
-      newHash
+      password
     };
     return await SalesforceApi.post(queryEndpoint, payload);
   };
