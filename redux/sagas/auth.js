@@ -58,8 +58,7 @@ const authorize = function* authorize({
 };
 const logout = function* logout() {
   try {
-    //TODO - move this somewhere more appropriate
-    Auth.signOut().catch(err => console.log('err: ', err));
+    yield call(Api.logout);
     yield call(purgeStoredState, persistConfig());
     yield put({ type: LOGOUT_REQUEST_SUCCESS });
     yield put({ type: RESET_TO_SIGN_IN });

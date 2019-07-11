@@ -121,6 +121,12 @@ export default class Api {
       .catch(err => console.log(err));
   };
 
+  logout = async () => {
+    return await Auth.signOut()
+      .then(success => success)
+      .catch(err => console.log('err: ', err));
+  };
+
   register = async (email, password, name, securityQuestion) => {
     const queryEndpoint = '/users';
     const payload = {

@@ -47,7 +47,7 @@ function* getBroadcast() {
 
 function* saga() {
   // TODO - need to re-enable these and investigate the error
-  // yield takeEvery(GET_BROADCAST_CARDS_ON_LOGIN, getBroadcast);
+  yield takeEvery(GET_BROADCAST_CARDS_ON_LOGIN, getBroadcast);
   // yield takeEvery(GET_BROADCAST_CARDS, getBroadcast);
   yield takeEvery(REMOVE_BROADCAST_CARD, removeBroadcast);
 }
