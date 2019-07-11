@@ -1,4 +1,5 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects';
+import { Auth } from 'aws-amplify';
 import {
   LOGIN_REQUEST,
   LOGIN_REQUEST_LOADING,
@@ -57,6 +58,8 @@ const authorize = function* authorize({
 };
 const logout = function* logout() {
   try {
+    //TODO - move this somewhere more appropriate
+    Auth.signOut().catch(err => console.log('err: ', err));
     yield call(purgeStoredState, persistConfig());
     yield put({ type: LOGOUT_REQUEST_SUCCESS });
     yield put({ type: RESET_TO_SIGN_IN });

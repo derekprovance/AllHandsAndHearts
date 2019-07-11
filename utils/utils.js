@@ -23,7 +23,7 @@ export const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 export const delayExec = (ms, func) =>
   new Promise(resolve => {
     setTimeout(() => {
-      resolveconnect(func());
+      resolve(func());
     }, ms);
   });
 export class SalesforceApiWrapper {

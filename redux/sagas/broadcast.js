@@ -23,7 +23,6 @@ function* removeBroadcast(action) {
 /**
  * Broadcast saga
  */
-
 const getBroadcastsHelper = function* getBroadcastsHelper() {
   yield put({ type: SENDING_REQUEST, sending: true });
   try {
@@ -47,8 +46,9 @@ function* getBroadcast() {
 }
 
 function* saga() {
-  yield takeEvery(GET_BROADCAST_CARDS_ON_LOGIN, getBroadcast);
-  yield takeEvery(GET_BROADCAST_CARDS, getBroadcast);
+  // TODO - need to re-enable these and investigate the error
+  // yield takeEvery(GET_BROADCAST_CARDS_ON_LOGIN, getBroadcast);
+  // yield takeEvery(GET_BROADCAST_CARDS, getBroadcast);
   yield takeEvery(REMOVE_BROADCAST_CARD, removeBroadcast);
 }
 export default saga;

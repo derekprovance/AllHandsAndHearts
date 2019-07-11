@@ -1,5 +1,4 @@
 import { SalesforceApiWrapper } from '../utils/utils';
-import * as AuthService from './auth';
 import { Auth } from 'aws-amplify';
 const SalesforceApi = new SalesforceApiWrapper();
 
