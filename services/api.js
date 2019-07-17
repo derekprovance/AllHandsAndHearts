@@ -127,15 +127,14 @@ export default class Api {
       .catch(err => console.log('err: ', err));
   };
 
-  register = async (email, password, name, securityQuestion) => {
-    const queryEndpoint = '/users';
-    const payload = {
-      email,
-      name,
+  register = async (email, password, name) => {
+    Auth.signUp({
+      username: email,
       password: password,
-      securityQuestion
-    };
-    return await SalesforceApi.post(queryEndpoint, payload);
+      attributes: {
+        name: name
+      }
+    });
   };
 
   changePassword = async (oldPassword, newPassword) => {

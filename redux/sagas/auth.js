@@ -29,7 +29,6 @@ const authorize = function* authorize({
   email,
   password,
   name,
-  securityQuestion,
   isRegistering = false
 }) {
   try {
@@ -38,13 +37,7 @@ const authorize = function* authorize({
     });
     let response;
     if (isRegistering) {
-      response = yield call(
-        Api.register,
-        email,
-        password,
-        name,
-        securityQuestion
-      );
+      response = yield call(Api.register, email, password, name);
     } else {
       response = yield call(Api.login, email, password);
     }
@@ -74,6 +67,7 @@ function* loginFlow(action) {
     const auth = yield call(authorize, {
       email,
       password,
+      name,
       isRegistering: false
     });
     //TODO(DEREK) - possible place to save the security token by Amazon
@@ -103,7 +97,7 @@ function* logoutFlow() {
 }
 
 function* registerFlow(action) {
-  const { email, password, name, securityQuestion } = action.data;
+  const { email, password, name } = action.data;
   yield put({ type: REGISTER_REQUEST_LOADING, loading: true });
   try {
     // We call the `authorize` task with the data, telling it that we are registering a user
@@ -112,7 +106,6 @@ function* registerFlow(action) {
       email,
       password,
       name,
-      securityQuestion,
       isRegistering: true
     });
     // If we could register a user, we send the appropiate actions
