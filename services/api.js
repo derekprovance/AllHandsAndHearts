@@ -138,13 +138,14 @@ export default class Api {
     return await SalesforceApi.post(queryEndpoint, payload);
   };
 
-  changePassword = async (email, password) => {
-    const queryEndpoint = '/changePassword';
-    const payload = {
-      email,
-      password
-    };
-    return await SalesforceApi.post(queryEndpoint, payload);
+  changePassword = async (email, oldPassword, newPassword) => {
+    //TODO(DEREK) - look into user object being email possibly
+    return await Auth.currentAuthenticatedUser()
+      .then(user => {
+        return Auth.changePassword(user, oldPassword, newPassword);
+      })
+      .then(data => true)
+      .catch(err => err);
   };
 
   /**

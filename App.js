@@ -7,11 +7,10 @@ import createStore from './redux';
 const { store, persistor } = createStore();
 import Amplify from '@aws-amplify/core';
 
+//TODO(DEREK) - verify if having the values here is a no-no or not
 Amplify.configure({
   Auth: {
-    // REQUIRED - Amazon Cognito Identity Pool ID
     identityPoolId: 'us-east-2_pEJ5U0LHb',
-    // REQUIRED - Amazon Cognito Region
     region: 'us-east-2',
     userPoolId: 'us-east-2_pEJ5U0LHb',
     userPoolWebClientId: 'b1ue32jicaln89jqv166ne69m'

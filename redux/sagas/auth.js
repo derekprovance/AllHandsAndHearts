@@ -1,5 +1,4 @@
 import { takeEvery, call, put, select } from 'redux-saga/effects';
-import { Auth } from 'aws-amplify';
 import {
   LOGIN_REQUEST,
   LOGIN_REQUEST_LOADING,
@@ -71,14 +70,13 @@ const logout = function* logout() {
 function* loginFlow(action) {
   yield put({ type: LOGIN_REQUEST_LOADING, loading: true });
   try {
-    const { email, password, securityQuestion } = action.data;
+    const { email, password } = action.data;
     const auth = yield call(authorize, {
       email,
       password,
-      securityQuestion,
       isRegistering: false
     });
-    //TODO need to consider saving the token here
+    //TODO(DEREK) - possible place to save the security token by Amazon
     if (auth && typeof auth === 'object' && auth.attributes) {
       yield put({
         type: SET_AUTH,
@@ -180,28 +178,27 @@ function* initializeAppState(action) {
 
 function* changePasswordFlow(action) {
   try {
-    const { email, newPassword } = action.data;
-    if (email) {
-      const status = yield call(Api.changePassword, email, newPassword);
-      if (status['Email__c']) {
-        yield put({
-          type: CHANGE_PASSWORD_SUCCESS,
-          passwordChangeStatus: 'Password changed successfully!'
-        });
-      } else {
-        yield put({
-          type: CHANGE_PASSWORD_ERROR,
-          passwordChangeStatus: status['status']
-            ? status['status']
-            : 'Error changing password.'
-        });
-      }
+    const { email, oldPassword, newPassword } = action.data;
+    const state = yield select(getState);
+    const status = yield call(
+      Api.changePassword,
+      state.auth.currentUserId,
+      oldPassword,
+      newPassword
+    );
+
+    if (status == true) {
+      yield put({
+        type: CHANGE_PASSWORD_SUCCESS,
+        passwordChangeStatus: 'Password changed successfully!'
+      });
     } else {
       yield put({
         type: CHANGE_PASSWORD_ERROR,
-        passwordChangeStatus: 'Error changing password.'
+        passwordChangeStatus: status.code
+          ? status.message
+          : 'Error changing password.'
       });
-      return;
     }
   } catch (e) {
     console.log(e);
