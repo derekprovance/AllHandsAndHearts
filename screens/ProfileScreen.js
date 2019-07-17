@@ -50,14 +50,16 @@ export default class ProfileScreen extends React.PureComponent {
         oldPassword,
         newPassword
       });
-
       this.setState({
-        email: '',
-        oldPassword: '',
-        newPassword: '',
-        rePassword: ''
+        email: ''
       });
     }
+
+    this.setState({
+      oldPassword: '',
+      newPassword: '',
+      rePassword: ''
+    });
     delayExec(2000, this.styledButton2.reset);
   };
 
