@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Alert } from 'react-native';
+import { View, Alert, KeyboardAvoidingView } from 'react-native';
 import { Feather as Icon } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import StyledButton from '../components/StyledButton';
@@ -64,7 +64,7 @@ export default class ProfileScreen extends React.PureComponent {
     const { Name__c, Email__c } = this.props.auth.user;
 
     return (
-      <KeyboardAwareScrollView
+      <KeyboardAvoidingView
         style={{
           backgroundColor: Colors.defaultColor.PAGE_BACKGROUND,
           flex: 1
@@ -122,7 +122,7 @@ export default class ProfileScreen extends React.PureComponent {
             </View>
           )}
         </View>
-        <View>
+        <KeyboardAwareScrollView>
           <StyledText
             style={{
               color: '#5a5b59',
@@ -199,8 +199,6 @@ export default class ProfileScreen extends React.PureComponent {
             onPress={this.handlePaswordChange}
             onSecondaryPress={() => this.styledButton2.reset()}
           />
-        </View>
-        <View>
           <StyledButton
             style={{
               height: 42,
@@ -210,8 +208,8 @@ export default class ProfileScreen extends React.PureComponent {
             text="Log out"
             onPress={() => this.props.logout()}
           />
-        </View>
-      </KeyboardAwareScrollView>
+        </KeyboardAwareScrollView>
+      </KeyboardAvoidingView>
     );
   }
 }

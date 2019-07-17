@@ -138,8 +138,7 @@ export default class Api {
     return await SalesforceApi.post(queryEndpoint, payload);
   };
 
-  changePassword = async (email, oldPassword, newPassword) => {
-    //TODO(DEREK) - look into user object being email possibly
+  changePassword = async (oldPassword, newPassword) => {
     return await Auth.currentAuthenticatedUser()
       .then(user => {
         return Auth.changePassword(user, oldPassword, newPassword);

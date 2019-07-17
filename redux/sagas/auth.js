@@ -178,14 +178,8 @@ function* initializeAppState(action) {
 
 function* changePasswordFlow(action) {
   try {
-    const { email, oldPassword, newPassword } = action.data;
-    const state = yield select(getState);
-    const status = yield call(
-      Api.changePassword,
-      state.auth.currentUserId,
-      oldPassword,
-      newPassword
-    );
+    const { oldPassword, newPassword } = action.data;
+    const status = yield call(Api.changePassword, oldPassword, newPassword);
 
     if (status == true) {
       yield put({
