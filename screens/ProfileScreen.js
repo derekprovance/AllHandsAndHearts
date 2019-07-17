@@ -42,6 +42,8 @@ export default class ProfileScreen extends React.PureComponent {
       Alert.alert("Passwords don't match.");
     } else if (newPassword.length <= 6) {
       Alert.alert('Password must be greater than 6 characters.');
+    } else if (oldPassword == newPassword) {
+      Alert.alert('New password is the same as the old password!');
     } else {
       await this.props.changePassword({
         email: this.props.auth.user.Email__c,
