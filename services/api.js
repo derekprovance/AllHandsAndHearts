@@ -128,13 +128,15 @@ export default class Api {
   };
 
   register = async (email, password, name) => {
-    Auth.signUp({
+    return await Auth.signUp({
       username: email,
       password: password,
       attributes: {
         name: name
       }
-    });
+    })
+      .then(success => success)
+      .catch(err => console.log('err: ', err));
   };
 
   changePassword = async (oldPassword, newPassword) => {

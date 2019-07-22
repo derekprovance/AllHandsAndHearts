@@ -13,8 +13,7 @@ export default class LoginForm extends React.PureComponent {
   state = {
     email: '',
     password: '',
-    dialogVisible: false,
-    securityQuestion: ''
+    dialogVisible: false
   };
 
   showDialog = () => {
@@ -46,10 +45,9 @@ export default class LoginForm extends React.PureComponent {
 
   handleLogin = async () => {
     this.styledButton2.load();
-    let { email, password, securityQuestion } = this.state;
+    let { email, password } = this.state;
     email = email.trim();
     password = password.trim();
-    securityQuestion = securityQuestion.trim();
     if (email.length > 0 && password.length > 0) {
       await this.props.login({
         email,
@@ -58,21 +56,14 @@ export default class LoginForm extends React.PureComponent {
       this.props.auth.loggedIn &&
         this.styledButton2 &&
         this.styledButton2.success();
-    } else if (email.length > 0 && securityQuestion.length > 0) {
-      await this.props.login({
-        email,
-        securityQuestion
-      });
-      this.props.auth.loggedIn &&
-        this.styledButton2 &&
-        this.styledButton2.success();
     } else {
-      this.styledButton2 && this.styledButton2.error();
-      this.props.alertWithType(
-        'error',
-        'Log in',
-        'Both Email and Password are required'
-      );
+      if (this.styledButton2 && this.styledButton2.error()) {
+        this.props.alertWithType(
+          'error',
+          'Log in',
+          'Both Email and Password are required'
+        );
+      }
       delayExec(2000, this.styledButton2.reset);
     }
   };
@@ -132,21 +123,7 @@ export default class LoginForm extends React.PureComponent {
             autoCapitalize="none"
             autoCorrect={false}
             enablesReturnKeyAutomatically
-            onSubmitEditing={() => this.securityQuestionRef.focus()}
             onChangeText={value => this._handleOnChangeText('email', value)}
-          />
-          <StyledInput
-            returnKeyType="done"
-            style={styles.input}
-            autoCapitalize="none"
-            autoCorrect={false}
-            placeholder="What city were you born?"
-            enablesReturnKeyAutomatically
-            inputRef={element => (this.securityQuestionRef = element)}
-            onChangeText={value =>
-              this._handleOnChangeText('securityQuestion', value)
-            }
-            onSubmitEditing={this.handleLogin}
           />
           <TouchableNativeFeedback
             onPress={this.resetPasswordClicked.bind(this)}

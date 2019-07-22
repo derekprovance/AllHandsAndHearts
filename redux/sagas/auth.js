@@ -100,32 +100,27 @@ function* registerFlow(action) {
   const { email, password, name } = action.data;
   yield put({ type: REGISTER_REQUEST_LOADING, loading: true });
   try {
-    // We call the `authorize` task with the data, telling it that we are registering a user
-    // This returns `true` if the registering was successful, `false` if not
     const registerSuccess = yield call(authorize, {
       email,
       password,
       name,
       isRegistering: true
     });
-    // If we could register a user, we send the appropiate actions
+    console.log(registerSuccess.user);
     if (
       registerSuccess &&
       typeof registerSuccess === 'object' &&
-      registerSuccess.Email__c
+      registerSuccess.user
     ) {
-      yield put({
-        type: SET_AUTH,
-        newAuthState: true,
-        currentUserId: registerSuccess.Id,
-        user: registerSuccess
-      });
-      yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
-      yield put({ type: RESET_TO_MAIN });
+      //TODO(DEREK) - Need to throw an alert for a successful register
+      //TODO(DEREK) - Need to notify user that they will need to confirm their e-mail address
     } else {
-      yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
-      yield put({ type: RESET_TO_SIGN_IN });
+      //TODO(DEREK) - Need to throw an alert for a failed successful register
+      // Perhaps test here if it fails, that it actually hits this end block
+      console.log('If you see this, great. If not, remove else');
     }
+    yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
+    yield put({ type: RESET_TO_SIGN_IN });
   } catch (e) {
     yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
     yield put({ type: LOGIN_REQUEST_FAILED, error: null });

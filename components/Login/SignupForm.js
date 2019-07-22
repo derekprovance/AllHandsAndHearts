@@ -11,8 +11,7 @@ export default class SignupForm extends React.PureComponent {
   state = {
     name: '',
     email: '',
-    password: '',
-    securityQuestion: ''
+    password: ''
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.loginError && this.styledButton2) {
@@ -43,9 +42,19 @@ export default class SignupForm extends React.PureComponent {
         password,
         name
       });
-      this.props.auth.loggedIn &&
+      if (
+        this.props.auth.loggedIn &&
         this.styledButton2 &&
-        this.styledButton2.success();
+        this.styledButton2.success()
+      ) {
+        this.props.alertWithType(
+          'success',
+          'Sign up',
+          'An e-mail has been sent to you, please click the link to activate your account.'
+        );
+      } else {
+        //TODO(DEREK) - print error
+      }
     } else {
       this.props.alertWithType(
         'error',
@@ -89,7 +98,6 @@ export default class SignupForm extends React.PureComponent {
           returnKeyType="next"
           enablesReturnKeyAutomatically
           inputRef={element => (this.passwordRef = element)}
-          onSubmitEditing={() => this.securityQuestionRef.focus()}
           onChangeText={value => this._handleOnChangeText('password', value)}
         />
         <StyledButton2
