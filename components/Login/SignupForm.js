@@ -42,15 +42,6 @@ export default class SignupForm extends React.PureComponent {
         password,
         name
       });
-      if (this.styledButton2 && this.styledButton2.success()) {
-        this.props.alertWithType(
-          'custom',
-          'Sign up',
-          'An e-mail has been sent to you, please click the link to activate your account.'
-        );
-      } else {
-        //TODO(DEREK) - print error
-      }
     } else {
       this.props.alertWithType(
         'error',
