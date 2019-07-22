@@ -40,7 +40,6 @@ export default class Activities extends PureComponent {
   };
 
   render() {
-    //console.log(this.props);
     let {
       style,
       activity: { activityCards, votedPins }

@@ -19,7 +19,6 @@ export const getPinLocationTypes = async userId => {
           global.pinLocationTypeNames.push(types[type][key]);
         }
       }
-      //console.log(key + ":" + types[type][key]);
     }
   }
   //filter out duplicate types
