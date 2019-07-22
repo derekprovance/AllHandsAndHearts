@@ -117,22 +117,21 @@ function* registerFlow(action) {
         registrationStatus:
           'An e-mail has been sent to you. Please click the link to activate your account.'
       });
+      yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
+      yield put({ type: RESET_TO_SIGN_IN });
     } else {
-      //TODO(DEREK) - Need to throw an alert for a failed successful register
-      // Perhaps test here if it fails, that it actually hits this end block
-      console.log('If you see this, great. If not, remove else');
+      yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
       yield put({
         type: REGISTER_REQUEST_FAILED,
-        registrationStatus: 'Stupid second test!'
+        error: registerSuccess.message
       });
     }
-    yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
-    yield put({ type: RESET_TO_SIGN_IN });
   } catch (e) {
-    console.log(e);
     yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
-    yield put({ type: LOGIN_REQUEST_FAILED, error: null });
-    yield put({ type: RESET_TO_SIGN_IN });
+    yield put({ type: REGISTER_REQUEST_FAILED, error: e.message });
+  } finally {
+    yield put({ type: REGISTER_REQUEST_SUCCESS, registrationStatus: null });
+    yield put({ type: REGISTER_REQUEST_FAILED, error: null });
   }
 }
 

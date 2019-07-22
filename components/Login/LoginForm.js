@@ -26,6 +26,10 @@ export default class LoginForm extends React.PureComponent {
   };
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.auth.registrationStatus) {
+      Alert.alert(nextProps.auth.registrationStatus);
+    }
+
     if (this.props.auth.loginError && this.styledButton2) {
       this.props.alertWithType(
         'error',

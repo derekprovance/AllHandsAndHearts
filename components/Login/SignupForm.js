@@ -13,12 +13,18 @@ export default class SignupForm extends React.PureComponent {
     email: '',
     password: ''
   };
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps.auth.loginError && this.styledButton2) {
+    if (
+      (nextProps.auth.error || nextProps.auth.registerError) &&
+      this.styledButton2
+    ) {
       this.props.alertWithType(
         'error',
         'Sign up',
-        `${nextProps.auth.loginError} Check Name, Email, Password`
+        nextProps.auth.error
+          ? `${nextProps.auth.error} Check Name, Email, Password`
+          : nextProps.auth.registerError
       );
       this.styledButton2.error();
       delayExec(2000, this.styledButton2.reset);

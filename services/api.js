@@ -136,7 +136,7 @@ export default class Api {
       }
     })
       .then(success => success)
-      .catch(err => console.log('err: ', err));
+      .catch(err => err);
   };
 
   changePassword = async (oldPassword, newPassword) => {

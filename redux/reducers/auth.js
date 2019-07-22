@@ -46,7 +46,7 @@ export const auth = (state = INITIAL_STATE, action) => {
     case REGISTER_REQUEST_SUCCESS:
       return { ...state, registrationStatus: action.registrationStatus };
     case REGISTER_REQUEST_FAILED:
-      return { ...state, registrationStatus: action.registrationStatus };
+      return { ...state, registerError: action.error };
     case CHANGE_PASSWORD_SUCCESS:
       return { ...state, passwordChangeStatus: action.passwordChangeStatus };
     case CHANGE_PASSWORD_ERROR:
