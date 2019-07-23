@@ -34,7 +34,7 @@ export default class LoginForm extends React.PureComponent {
       this.props.alertWithType(
         'error',
         'Log in',
-        `${nextProps.auth.loginError} Check Email and Password`
+        `${nextProps.auth.loginError}`
       );
       this.styledButton2.error();
       delayExec(2000, this.styledButton2.reset);

@@ -82,7 +82,7 @@ function* loginFlow(action) {
       });
       yield put({ type: RESET_TO_MAIN });
     } else {
-      yield put({ type: LOGIN_REQUEST_FAILED, error: 'Login failed.' });
+      yield put({ type: LOGIN_REQUEST_FAILED, error: auth.message });
     }
   } catch (e) {
     yield put({ type: LOGIN_REQUEST_FAILED, error: e });

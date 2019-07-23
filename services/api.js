@@ -118,7 +118,7 @@ export default class Api {
   login = async (email, password) => {
     return await Auth.signIn(email, password)
       .then(success => success)
-      .catch(err => console.log(err));
+      .catch(err => err);
   };
 
   logout = async () => {
