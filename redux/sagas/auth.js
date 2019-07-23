@@ -120,7 +120,6 @@ function* registerFlow(action) {
       yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
       yield put({ type: RESET_TO_SIGN_IN });
     } else {
-      // const errorMessage;
       switch (registerSuccess.code) {
         case 'NotAuthorizedException':
           errorMessage =
