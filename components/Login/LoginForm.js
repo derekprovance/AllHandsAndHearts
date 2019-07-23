@@ -61,13 +61,12 @@ export default class LoginForm extends React.PureComponent {
         this.styledButton2 &&
         this.styledButton2.success();
     } else {
-      if (this.styledButton2 && this.styledButton2.error()) {
-        this.props.alertWithType(
-          'error',
-          'Log in',
-          'Both Email and Password are required'
-        );
-      }
+      this.styledButton2 && this.styledButton2.error();
+      this.props.alertWithType(
+        'error',
+        'Log in',
+        'Both Email and Password are required'
+      );
       delayExec(2000, this.styledButton2.reset);
     }
   };
