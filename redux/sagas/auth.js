@@ -120,11 +120,17 @@ function* registerFlow(action) {
       yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
       yield put({ type: RESET_TO_SIGN_IN });
     } else {
+      // const errorMessage;
+      switch (registerSuccess.code) {
+        case 'NotAuthorizedException':
+          errorMessage =
+            'User Registration is disabled. Please contact your administrator.';
+          break;
+        default:
+          errorMessage = registerSuccess.message;
+      }
       yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
-      yield put({
-        type: REGISTER_REQUEST_FAILED,
-        error: registerSuccess.message
-      });
+      yield put({ type: REGISTER_REQUEST_FAILED, error: errorMessage });
     }
   } catch (e) {
     yield put({ type: REGISTER_REQUEST_LOADING, loading: false });
