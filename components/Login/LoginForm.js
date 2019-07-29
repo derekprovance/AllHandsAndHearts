@@ -35,11 +35,6 @@ export default class LoginForm extends React.PureComponent {
   };
 
   showSuccessFailForgotPasswordMessage(nextProps) {
-    //TODO(DEREK) - this is messy... and honestly a work around for the props
-    if (!this.state.forgotPassSubmitted) {
-      return;
-    }
-
     if (nextProps.auth.forgotPasswordStatus) {
       if (nextProps.auth.forgotPasswordStatus == true) {
         if (this.state.email) {
@@ -57,21 +52,15 @@ export default class LoginForm extends React.PureComponent {
   }
 
   showSuccessFailForgotPasswordCodeMessage(nextProps) {
-    //TODO(DEREK) - this is messy... and honestly a work around for the props
-    if (!this.state.forgotPassSubmitted) {
-      return;
-    }
-
-    if (nextProps.auth.forgotPasswordCodeError) {
+    //TODO(DEREK) - determine between alert and notification
+    if (nextProps.auth.forgotPasswordCodeStatus) {
       this.props.alertWithType(
         'error',
         'Forgot Password',
-        `${nextProps.auth.forgotPasswordCodeError}`
+        `${nextProps.auth.forgotPasswordCodeStatus}`
       );
-    }
 
-    if (nextProps.auth.forgotPasswordCodeSuccess) {
-      Alert.alert(nextProps.auth.forgotPasswordCodeSuccess);
+      //TODO(DEREK) - look into if this state should be set elsewhere
       this.setState({ forgotPassSubmitted: false });
     }
   }
@@ -81,9 +70,10 @@ export default class LoginForm extends React.PureComponent {
       Alert.alert(nextProps.auth.registrationStatus);
     }
 
-    //TODO(DEREK) - clear the props!! or investigate if needed
-    this.showSuccessFailForgotPasswordMessage(nextProps);
-    this.showSuccessFailForgotPasswordCodeMessage(nextProps);
+    if (this.state.forgotPassSubmitted) {
+      this.showSuccessFailForgotPasswordMessage(nextProps);
+      this.showSuccessFailForgotPasswordCodeMessage(nextProps);
+    }
 
     if (this.props.auth.loginError && this.styledButton2) {
       this.props.alertWithType(

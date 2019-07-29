@@ -21,6 +21,7 @@ import {
   FORGOT_PASSWORD,
   FORGOT_PASSWORD_ERROR,
   FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_STATUS_RESET,
   FORGOT_PASSWORD_CODE,
   FORGOT_PASSWORD_CODE_FAILURE,
   FORGOT_PASSWORD_CODE_SUCCESS,
@@ -237,6 +238,11 @@ function* forgotPasswordFlow(action) {
       type: FORGOT_PASSWORD_ERROR,
       forgotPasswordStatus: e.message
     });
+  } finally {
+    yield put({
+      type: FORGOT_PASSWORD_STATUS_RESET,
+      forgotPasswordStatus: null
+    });
   }
 }
 
@@ -248,16 +254,21 @@ function* forgotPasswordCodeFlow(action) {
     if (status != undefined && status.code) {
       yield put({
         type: FORGOT_PASSWORD_CODE_FAILURE,
-        forgotPasswordCodeError: status.message
+        forgotPasswordCodeStatus: status.message
       });
     } else {
       yield put({
         type: FORGOT_PASSWORD_CODE_SUCCESS,
-        forgotPasswordCodeSuccess: 'Password has been reset!'
+        forgotPasswordCodeStatus: 'Password has been reset!'
       });
     }
   } catch (e) {
     console.log(e);
+  } finally {
+    yield put({
+      type: FORGOT_PASSWORD_CODE_FAILURE,
+      forgotPasswordCodeStatus: null
+    });
   }
 }
 

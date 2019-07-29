@@ -12,8 +12,10 @@ import {
   CHANGE_PASSWORD_STATUS_RESET,
   FORGOT_PASSWORD_ERROR,
   FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_STATUS_RESET,
   FORGOT_PASSWORD_CODE_FAILURE,
-  FORGOT_PASSWORD_CODE_SUCCESS
+  FORGOT_PASSWORD_CODE_SUCCESS,
+  FORGOT_PASSWORD_CODE_STATUS_RESET
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
@@ -52,24 +54,19 @@ export const auth = (state = INITIAL_STATE, action) => {
     case REGISTER_REQUEST_FAILED:
       return { ...state, registerError: action.error };
     case CHANGE_PASSWORD_SUCCESS:
-      return { ...state, passwordChangeStatus: action.passwordChangeStatus };
     case CHANGE_PASSWORD_ERROR:
-      return { ...state, passwordChangeStatus: action.passwordChangeStatus };
     case CHANGE_PASSWORD_STATUS_RESET:
       return { ...state, passwordChangeStatus: action.passwordChangeStatus };
     case FORGOT_PASSWORD_ERROR:
-      return { ...state, forgotPasswordStatus: action.forgotPasswordStatus };
     case FORGOT_PASSWORD_SUCCESS:
+    case FORGOT_PASSWORD_STATUS_RESET:
       return { ...state, forgotPasswordStatus: action.forgotPasswordStatus };
     case FORGOT_PASSWORD_CODE_FAILURE:
-      return {
-        ...state,
-        forgotPasswordCodeError: action.forgotPasswordCodeError
-      };
     case FORGOT_PASSWORD_CODE_SUCCESS:
+    case FORGOT_PASSWORD_CODE_STATUS_RESET:
       return {
         ...state,
-        forgotPasswordCodeSuccess: action.forgotPasswordCodeSuccess
+        forgotPasswordCodeStatus: action.forgotPasswordCodeStatus
       };
     default:
       return state;
