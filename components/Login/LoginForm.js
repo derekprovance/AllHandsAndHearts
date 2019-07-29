@@ -9,26 +9,81 @@ import Colors from '../../constants/Colors';
 import { delayExec } from '../../utils/utils';
 import { Linking, TouchableOpacity, Alert } from 'react-native';
 import Dialog from 'react-native-dialog';
+
 export default class LoginForm extends React.PureComponent {
   state = {
     email: '',
     password: '',
-    dialogVisible: false
+    forgotPassVisible: false,
+    forgotPassCodeVisible: false,
+    forgotPassSubmitted: false
   };
 
-  showDialog = () => {
-    this.setState({ dialogVisible: true });
+  showForgotPasswordDialog = () => {
+    this.setState({ forgotPassVisible: true });
+    this.setState({ password: '' });
+  };
+
+  showForgotPasswordCodeDialog = () => {
+    this.setState({ forgotPassCodeVisible: true });
     this.setState({ password: '' });
   };
 
   handleCancel = () => {
-    this.setState({ dialogVisible: false });
+    this.setState({ forgotPassVisible: false });
+    this.setState({ forgotPassCodeVisible: false });
   };
+
+  showSuccessFailForgotPasswordMessage(nextProps) {
+    //TODO(DEREK) - this is messy... and honestly a work around for the props
+    if (!this.state.forgotPassSubmitted) {
+      return;
+    }
+
+    if (nextProps.auth.forgotPasswordStatus) {
+      if (nextProps.auth.forgotPasswordStatus == true) {
+        if (this.state.email) {
+          this.setState({ forgotPassCodeVisible: true });
+        }
+      } else {
+        this.setState({ forgotPassSubmitted: false });
+        this.props.alertWithType(
+          'error',
+          'Forgot Password',
+          `${nextProps.auth.forgotPasswordStatus}`
+        );
+      }
+    }
+  }
+
+  showSuccessFailForgotPasswordCodeMessage(nextProps) {
+    //TODO(DEREK) - this is messy... and honestly a work around for the props
+    if (!this.state.forgotPassSubmitted) {
+      return;
+    }
+
+    if (nextProps.auth.forgotPasswordCodeError) {
+      this.props.alertWithType(
+        'error',
+        'Forgot Password',
+        `${nextProps.auth.forgotPasswordCodeError}`
+      );
+    }
+
+    if (nextProps.auth.forgotPasswordCodeSuccess) {
+      Alert.alert(nextProps.auth.forgotPasswordCodeSuccess);
+      this.setState({ forgotPassSubmitted: false });
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.registrationStatus) {
       Alert.alert(nextProps.auth.registrationStatus);
     }
+
+    //TODO(DEREK) - clear the props!! or investigate if needed
+    this.showSuccessFailForgotPasswordMessage(nextProps);
+    this.showSuccessFailForgotPasswordCodeMessage(nextProps);
 
     if (this.props.auth.loginError && this.styledButton2) {
       this.props.alertWithType(
@@ -68,6 +123,49 @@ export default class LoginForm extends React.PureComponent {
         'Both Email and Password are required'
       );
       delayExec(2000, this.styledButton2.reset);
+    }
+  };
+
+  handleForgotPassword = async () => {
+    this.setState({ forgotPassVisible: false });
+    let { email } = this.state;
+    email = email.trim();
+
+    if (email.length > 0) {
+      this.props.forgotPassword({
+        email
+      });
+      this.setState({ forgotPassSubmitted: true });
+    } else {
+      this.props.alertWithType(
+        'error',
+        'Log in',
+        'Email is required for password reset!'
+      );
+    }
+  };
+
+  handleForgotPasswordCode = async () => {
+    this.setState({ forgotPassCodeVisible: false });
+    let { email, code, password } = this.state;
+
+    if (
+      password != undefined &&
+      code != undefined &&
+      code.length > 0 &&
+      password.length > 0
+    ) {
+      this.props.forgotPasswordCode({
+        email,
+        code,
+        password
+      });
+    } else {
+      this.props.alertWithType(
+        'error',
+        'Recovery Code',
+        'Both code and password fields are required!'
+      );
     }
   };
 
@@ -113,10 +211,17 @@ export default class LoginForm extends React.PureComponent {
         <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
           <Text style={styles.link}>Don't have an account?</Text>
         </TouchableNativeFeedback>
-        <TouchableNativeFeedback onPress={this.showDialog}>
-          <Text style={styles.link}>Forgot Password?</Text>
-        </TouchableNativeFeedback>
-        <Dialog.Container visible={this.state.dialogVisible}>
+        {this.state.forgotPassSubmitted ? (
+          <TouchableNativeFeedback onPress={this.showForgotPasswordCodeDialog}>
+            <Text style={styles.link}>Enter Recovery Code</Text>
+          </TouchableNativeFeedback>
+        ) : (
+          <TouchableNativeFeedback onPress={this.showForgotPasswordDialog}>
+            <Text style={styles.link}>Forgot Password?</Text>
+          </TouchableNativeFeedback>
+        )}
+
+        <Dialog.Container visible={this.state.forgotPassVisible}>
           <Dialog.Title>Forgot Password</Dialog.Title>
           <StyledInput
             style={styles.input}
@@ -136,7 +241,39 @@ export default class LoginForm extends React.PureComponent {
             </Text>
           </TouchableNativeFeedback>
           <Dialog.Button label="Cancel" onPress={this.handleCancel} />
-          <Dialog.Button label="Submit" onPress={this.handleLogin} />
+          <Dialog.Button label="Submit" onPress={this.handleForgotPassword} />
+        </Dialog.Container>
+        <Dialog.Container visible={this.state.forgotPassCodeVisible}>
+          <Dialog.Title>Recovery Code</Dialog.Title>
+          <Text style={styles.link}>
+            An recovery code has been sent to your e-mail address. Please enter
+            the code and new password below to recover your account.
+          </Text>
+          <StyledInput
+            style={styles.input}
+            placeholder="Code"
+            keyboardType="numeric"
+            returnKeyType="next"
+            autoCapitalize="none"
+            autoCorrect={false}
+            enablesReturnKeyAutomatically
+            onChangeText={value => this._handleOnChangeText('code', value)}
+          />
+          <StyledInput
+            secureTextEntry
+            clearTextOnFocus
+            returnKeyType="done"
+            style={styles.input}
+            placeholder="New Password"
+            enablesReturnKeyAutomatically
+            inputRef={element => (this.passwordRef = element)}
+            onChangeText={value => this._handleOnChangeText('password', value)}
+          />
+          <Dialog.Button label="Cancel" onPress={this.handleCancel} />
+          <Dialog.Button
+            label="Submit"
+            onPress={this.handleForgotPasswordCode}
+          />
         </Dialog.Container>
       </View>
     );

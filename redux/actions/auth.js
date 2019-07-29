@@ -10,7 +10,9 @@ import {
   INITIALIZE_APP_STATE,
   RESET_TO_MAIN,
   RESET_TO_SIGN_IN,
-  CHANGE_PASSWORD
+  CHANGE_PASSWORD,
+  FORGOT_PASSWORD,
+  FORGOT_PASSWORD_CODE
 } from './actionTypes';
 
 //will check if the user is already logged in
@@ -65,6 +67,16 @@ export const logout = () => ({
 
 export const changePassword = data => ({
   type: CHANGE_PASSWORD,
+  data
+});
+
+export const forgotPassword = data => ({
+  type: FORGOT_PASSWORD,
+  data
+});
+
+export const forgotPasswordCode = data => ({
+  type: FORGOT_PASSWORD_CODE,
   data
 });
 

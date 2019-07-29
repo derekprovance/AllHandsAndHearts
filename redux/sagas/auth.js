@@ -18,6 +18,12 @@ import {
   CHANGE_PASSWORD_ERROR,
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_PASSWORD_STATUS_RESET,
+  FORGOT_PASSWORD,
+  FORGOT_PASSWORD_ERROR,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_CODE,
+  FORGOT_PASSWORD_CODE_FAILURE,
+  FORGOT_PASSWORD_CODE_SUCCESS,
   LOGOUT_REQUEST_SUCCESS
 } from '../actions/actionTypes';
 import { purgeStoredState } from 'redux-persist';
@@ -208,11 +214,60 @@ function* changePasswordFlow(action) {
   }
 }
 
+function* forgotPasswordFlow(action) {
+  try {
+    const { email } = action.data;
+    const status = yield call(Api.forgotPassword, email);
+    console.log(status);
+
+    if (status.code) {
+      yield put({
+        type: FORGOT_PASSWORD_ERROR,
+        forgotPasswordStatus: status.message
+      });
+    } else {
+      yield put({
+        type: FORGOT_PASSWORD_SUCCESS,
+        forgotPasswordStatus: true
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    yield put({
+      type: FORGOT_PASSWORD_ERROR,
+      forgotPasswordStatus: e.message
+    });
+  }
+}
+
+function* forgotPasswordCodeFlow(action) {
+  try {
+    const { email, code, password } = action.data;
+    const status = yield call(Api.forgotPasswordCode, email, code, password);
+
+    if (status != undefined && status.code) {
+      yield put({
+        type: FORGOT_PASSWORD_CODE_FAILURE,
+        forgotPasswordCodeError: status.message
+      });
+    } else {
+      yield put({
+        type: FORGOT_PASSWORD_CODE_SUCCESS,
+        forgotPasswordCodeSuccess: 'Password has been reset!'
+      });
+    }
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 function* saga() {
   yield takeEvery(LOGIN_REQUEST, loginFlow);
   yield takeEvery(REGISTER_REQUEST, registerFlow);
   yield takeEvery(LOGOUT_REQUEST, logoutFlow);
   yield takeEvery(INITIALIZE_APP_STATE, initializeAppState);
   yield takeEvery(CHANGE_PASSWORD, changePasswordFlow);
+  yield takeEvery(FORGOT_PASSWORD, forgotPasswordFlow);
+  yield takeEvery(FORGOT_PASSWORD_CODE, forgotPasswordCodeFlow);
 }
 export default saga;

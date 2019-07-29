@@ -148,6 +148,18 @@ export default class Api {
       .catch(err => err);
   };
 
+  forgotPassword = async email => {
+    return await Auth.forgotPassword(email)
+      .then(data => data)
+      .catch(err => err);
+  };
+
+  forgotPasswordCode = async (email, code, new_password) => {
+    return await Auth.forgotPasswordSubmit(email, code, new_password)
+      .then(data => data)
+      .catch(err => err);
+  };
+
   /**
    * Push notification specific api
    */
