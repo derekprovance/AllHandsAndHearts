@@ -20,18 +20,25 @@ export default class LoginForm extends React.PureComponent {
   };
 
   showForgotPasswordDialog = () => {
+    this.clearPasswordInput();
     this.setState({ forgotPassVisible: true });
-    this.setState({ password: '' });
   };
 
   showForgotPasswordCodeDialog = () => {
+    this.clearPasswordInput();
     this.setState({ forgotPassCodeVisible: true });
-    this.setState({ password: '' });
   };
 
   handleCancel = () => {
     this.setState({ forgotPassVisible: false });
     this.setState({ forgotPassCodeVisible: false });
+  };
+
+  clearPasswordInput = () => {
+    if (this.passwordRef) {
+      this.passwordRef.clear();
+    }
+    this.setState({ password: '' });
   };
 
   showSuccessFailForgotPasswordMessage(nextProps) {
@@ -52,16 +59,15 @@ export default class LoginForm extends React.PureComponent {
   }
 
   showSuccessFailForgotPasswordCodeMessage(nextProps) {
-    //TODO(DEREK) - determine between alert and notification
-    if (nextProps.auth.forgotPasswordCodeStatus) {
+    if (nextProps.auth.forgotPasswordCodeStatus == true) {
+      Alert.alert('Password has been reset!');
+      this.setState({ forgotPassSubmitted: false });
+    } else if (nextProps.auth.forgotPasswordCodeStatus) {
       this.props.alertWithType(
         'error',
         'Forgot Password',
         `${nextProps.auth.forgotPasswordCodeStatus}`
       );
-
-      //TODO(DEREK) - look into if this state should be set elsewhere
-      this.setState({ forgotPassSubmitted: false });
     }
   }
 

@@ -25,6 +25,7 @@ import {
   FORGOT_PASSWORD_CODE,
   FORGOT_PASSWORD_CODE_FAILURE,
   FORGOT_PASSWORD_CODE_SUCCESS,
+  FORGOT_PASSWORD_CODE_STATUS_RESET,
   LOGOUT_REQUEST_SUCCESS
 } from '../actions/actionTypes';
 import { purgeStoredState } from 'redux-persist';
@@ -219,7 +220,6 @@ function* forgotPasswordFlow(action) {
   try {
     const { email } = action.data;
     const status = yield call(Api.forgotPassword, email);
-    console.log(status);
 
     if (status.code) {
       yield put({
@@ -259,14 +259,14 @@ function* forgotPasswordCodeFlow(action) {
     } else {
       yield put({
         type: FORGOT_PASSWORD_CODE_SUCCESS,
-        forgotPasswordCodeStatus: 'Password has been reset!'
+        forgotPasswordCodeStatus: true
       });
     }
   } catch (e) {
     console.log(e);
   } finally {
     yield put({
-      type: FORGOT_PASSWORD_CODE_FAILURE,
+      type: FORGOT_PASSWORD_CODE_STATUS_RESET,
       forgotPasswordCodeStatus: null
     });
   }
