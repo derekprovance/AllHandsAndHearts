@@ -80,8 +80,11 @@ function* loginFlow(action) {
       name,
       isRegistering: false
     });
-    //TODO(DEREK) - possible place to save the security token by Amazon
-    if (auth && typeof auth === 'object' && auth.attributes) {
+
+    if (auth.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      //TODO(DEREK) - create a change password screen and then procode to log the user in.
+    } else if (auth && typeof auth === 'object' && auth.attributes) {
+      //TODO(DEREK) - possible place to save the security token by Amazon
       yield put({
         type: SET_AUTH,
         newAuthState: true,
