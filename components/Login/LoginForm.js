@@ -76,6 +76,10 @@ export default class LoginForm extends React.PureComponent {
       Alert.alert(nextProps.auth.registrationStatus);
     }
 
+    if (nextProps.auth.setPass) {
+      this.props.changePage('newaccountpass');
+    }
+
     if (this.state.forgotPassSubmitted) {
       this.showSuccessFailForgotPasswordMessage(nextProps);
       this.showSuccessFailForgotPasswordCodeMessage(nextProps);
@@ -204,7 +208,7 @@ export default class LoginForm extends React.PureComponent {
           onPress={this.handleLogin}
           onSecondaryPress={() => this.styledButton2.reset()}
         />
-        <TouchableNativeFeedback onPress={() => this.props.linkPress()}>
+        <TouchableNativeFeedback onPress={() => this.props.changePage()}>
           <Text style={styles.link}>Don't have an account?</Text>
         </TouchableNativeFeedback>
         {this.state.forgotPassSubmitted ? (
@@ -277,7 +281,7 @@ export default class LoginForm extends React.PureComponent {
 }
 
 LoginForm.propTypes = {
-  linkPress: propTypes.func.isRequired
+  changePage: propTypes.func.isRequired
 };
 const styles = StyleSheet.create({
   container: {

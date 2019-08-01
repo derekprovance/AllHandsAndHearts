@@ -14,6 +14,7 @@ import {
   RESET_TO_MAIN,
   RESET_TO_SIGN_IN,
   REGISTER_PUSH_NOTIFICATION,
+  SET_PASSWORD_NEW_ACCOUNT,
   CHANGE_PASSWORD,
   CHANGE_PASSWORD_ERROR,
   CHANGE_PASSWORD_SUCCESS,
@@ -82,7 +83,7 @@ function* loginFlow(action) {
     });
 
     if (auth.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      //TODO(DEREK) - create a change password screen and then procode to log the user in.
+      yield put({ type: SET_PASSWORD_NEW_ACCOUNT, setPass: true });
     } else if (auth && typeof auth === 'object' && auth.attributes) {
       //TODO(DEREK) - possible place to save the security token by Amazon
       yield put({
@@ -100,6 +101,7 @@ function* loginFlow(action) {
   } finally {
     yield put({ type: LOGIN_REQUEST_LOADING, loading: false });
     yield put({ type: LOGIN_REQUEST_FAILED, error: null });
+    yield put({ type: SET_PASSWORD_NEW_ACCOUNT, setPass: false });
   }
 }
 

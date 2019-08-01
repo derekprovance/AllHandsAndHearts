@@ -12,7 +12,8 @@ import {
   RESET_TO_SIGN_IN,
   CHANGE_PASSWORD,
   FORGOT_PASSWORD,
-  FORGOT_PASSWORD_CODE
+  FORGOT_PASSWORD_CODE,
+  SET_PASSWORD_NEW_ACCOUNT
 } from './actionTypes';
 
 //will check if the user is already logged in
@@ -59,6 +60,10 @@ export const setAuth = newAuthState => ({
   type: SET_AUTH,
   newAuthState,
   currentUserId
+});
+
+export const setPasswordNewAccount = data => ({
+  type: SET_PASSWORD_NEW_ACCOUNT
 });
 
 export const logout = () => ({

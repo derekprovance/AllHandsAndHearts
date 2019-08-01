@@ -8,6 +8,7 @@ import {
 import { HideWithKeyboard } from 'react-native-hide-with-keyboard';
 import LoginForm from '../components/Login/LoginForm';
 import SignupForm from '../components/Login/SignupForm';
+import NewAccountPasswordForm from '../components/Login/NewAccountPasswordForm';
 import Colors from '../constants/Colors';
 import Layout from '../constants/Layout';
 import Slogan from '../components/Login/Slogan';
@@ -74,10 +75,16 @@ export default class Login extends React.PureComponent {
       shouldSloganAnimationDelay: false
     });
   }
-  _handleSwitchForm = () => {
-    this.setState(prevState => ({
-      switchForm: prevState.switchForm === 'login' ? 'signup' : 'login'
-    }));
+  _handleSwitchForm = form => {
+    console.log(form);
+
+    if (form) {
+      this.setState({ switchForm: form });
+    } else {
+      this.setState(prevState => ({
+        switchForm: prevState.switchForm === 'login' ? 'signup' : 'login'
+      }));
+    }
   };
   render() {
     if (this.props.loggedIn === true) {
@@ -134,7 +141,7 @@ export default class Login extends React.PureComponent {
             <LoginForm
               animation={'fadeInUpBig'}
               duration={350}
-              linkPress={this._handleSwitchForm}
+              changePage={this._handleSwitchForm}
               {...this.props}
             />
           )}
@@ -143,6 +150,13 @@ export default class Login extends React.PureComponent {
               animation={'fadeInUpBig'}
               duration={350}
               linkPress={this._handleSwitchForm}
+              {...this.props}
+            />
+          )}
+          {this.state.switchForm === 'newaccountpass' && (
+            <NewAccountPasswordForm
+              animation={'fadeInUpBig'}
+              duration={350}
               {...this.props}
             />
           )}
