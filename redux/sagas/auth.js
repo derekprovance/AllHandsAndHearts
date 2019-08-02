@@ -15,6 +15,7 @@ import {
   RESET_TO_SIGN_IN,
   REGISTER_PUSH_NOTIFICATION,
   SET_PASSWORD_NEW_ACCOUNT,
+  SWITCH_TO_SET_PASSWORD_NEW_ACCOUNT,
   CHANGE_PASSWORD,
   CHANGE_PASSWORD_ERROR,
   CHANGE_PASSWORD_SUCCESS,
@@ -83,7 +84,7 @@ function* loginFlow(action) {
     });
 
     if (auth.challengeName === 'NEW_PASSWORD_REQUIRED') {
-      yield put({ type: SET_PASSWORD_NEW_ACCOUNT, setPass: true });
+      yield put({ type: SWITCH_TO_SET_PASSWORD_NEW_ACCOUNT, setPass: true });
     } else if (auth && typeof auth === 'object' && auth.attributes) {
       //TODO(DEREK) - possible place to save the security token by Amazon
       yield put({
@@ -103,6 +104,26 @@ function* loginFlow(action) {
     yield put({ type: LOGIN_REQUEST_FAILED, error: null });
     yield put({ type: SET_PASSWORD_NEW_ACCOUNT, setPass: false });
   }
+}
+
+function* setPasswordNewAccount(action) {
+  //TODO(DEREK) - create success and failure enums
+  try {
+    const { email, password } = action.data;
+    const status = yield call(Api.completePassword, email, password);
+  } catch (e) {
+    //TODO(DEREK) - Handle fail case
+  }
+  // if (auth && typeof auth === 'object' && auth.attributes) {
+  //   //TODO(DEREK) - possible place to save the security token by Amazon
+  //   yield put({
+  //     type: SET_AUTH,
+  //     newAuthState: true,
+  //     currentUserId: auth.attributes.email,
+  //     user: auth.attributes
+  //   });
+  //   yield put({ type: RESET_TO_MAIN });
+  // }
 }
 
 function* logoutFlow() {
@@ -285,5 +306,6 @@ function* saga() {
   yield takeEvery(CHANGE_PASSWORD, changePasswordFlow);
   yield takeEvery(FORGOT_PASSWORD, forgotPasswordFlow);
   yield takeEvery(FORGOT_PASSWORD_CODE, forgotPasswordCodeFlow);
+  yield takeEvery(SET_PASSWORD_NEW_ACCOUNT, setPasswordNewAccount);
 }
 export default saga;

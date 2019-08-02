@@ -8,6 +8,7 @@ import {
   REGISTER_REQUEST_SUCCESS,
   REGISTER_REQUEST_FAILED,
   SET_PASSWORD_NEW_ACCOUNT,
+  SWITCH_TO_SET_PASSWORD_NEW_ACCOUNT,
   CHANGE_PASSWORD_SUCCESS,
   CHANGE_PASSWORD_ERROR,
   CHANGE_PASSWORD_STATUS_RESET,
@@ -54,7 +55,7 @@ export const auth = (state = INITIAL_STATE, action) => {
       return { ...state, registrationStatus: action.registrationStatus };
     case REGISTER_REQUEST_FAILED:
       return { ...state, registerError: action.error };
-    case SET_PASSWORD_NEW_ACCOUNT:
+    case SWITCH_TO_SET_PASSWORD_NEW_ACCOUNT:
       return { ...state, setPass: action.setPass };
     case CHANGE_PASSWORD_SUCCESS:
     case CHANGE_PASSWORD_ERROR:

@@ -76,8 +76,6 @@ export default class Login extends React.PureComponent {
     });
   }
   _handleSwitchForm = form => {
-    console.log(form);
-
     if (form) {
       this.setState({ switchForm: form });
     } else {

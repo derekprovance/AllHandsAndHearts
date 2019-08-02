@@ -63,7 +63,8 @@ export const setAuth = newAuthState => ({
 });
 
 export const setPasswordNewAccount = data => ({
-  type: SET_PASSWORD_NEW_ACCOUNT
+  type: SET_PASSWORD_NEW_ACCOUNT,
+  data
 });
 
 export const logout = () => ({

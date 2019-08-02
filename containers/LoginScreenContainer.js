@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import { loginRequest, registerRequest } from '../redux/actions/auth';
 import LoginScreen from '../screens/LoginScreen';
 import { AlertConsumer } from '../containers/AlertContainer';
-import { forgotPassword, forgotPasswordCode } from '../redux/actions/auth';
+import {
+  forgotPassword,
+  forgotPasswordCode,
+  setPasswordNewAccount,
+  logout
+} from '../redux/actions/auth';
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -18,6 +23,12 @@ const mapDispatchToProps = dispatch => {
     },
     forgotPasswordCode: data => {
       dispatch(forgotPasswordCode(data));
+    },
+    setPasswordNewAccount: data => {
+      dispatch(setPasswordNewAccount(data));
+    },
+    logout: () => {
+      dispatch(logout());
     }
   };
 };

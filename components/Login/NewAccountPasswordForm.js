@@ -3,16 +3,15 @@ import propTypes from 'prop-types';
 import { StyleSheet } from 'react-native';
 import { View, Text } from 'react-native-animatable';
 import StyledInput from '../StyledInput';
+import StyledButton from '../StyledButton';
 import { StyledButton2 } from '../StyledButton';
 import Colors from '../../constants/Colors';
 import { delayExec } from '../../utils/utils';
 export default class NewAccountPasswordForm extends React.PureComponent {
   state = {
-    password01: '',
-    password02: ''
+    password: '',
+    password2: ''
   };
-
-  componentWillReceiveProps(nextProps) {}
 
   _handleOnChangeText = (key, value) => {
     this.setState({
@@ -22,13 +21,15 @@ export default class NewAccountPasswordForm extends React.PureComponent {
 
   handleSetPassword = () => {
     this.styledButton2.load();
-    let { password01, password02 } = this.state;
+    let { password, password2 } = this.state;
 
-    if (password01 == password02) {
-      if (password01.length > 0) {
-        //TODO(DEREK) - Do the set password request
-        //TODO(DEREK) - On success reset to main
-        console.log('Yeah baby... we hit here');
+    if (password == password2) {
+      if (password.length > 0) {
+        //TODO(DEREK) - pipe in email to this form
+        this.props.setPasswordNewAccount({
+          email: 'test@dummy.com',
+          password: password
+        });
       } else {
         this.showErrorMessage('A password must be provided.');
       }
@@ -55,7 +56,7 @@ export default class NewAccountPasswordForm extends React.PureComponent {
           returnKeyType="next"
           enablesReturnKeyAutomatically
           inputRef={element => (this.password01Ref = element)}
-          onChangeText={value => this._handleOnChangeText('password01', value)}
+          onChangeText={value => this._handleOnChangeText('password', value)}
         />
         <StyledInput
           secureTextEntry
@@ -65,13 +66,22 @@ export default class NewAccountPasswordForm extends React.PureComponent {
           returnKeyType="next"
           enablesReturnKeyAutomatically
           inputRef={element => (this.password02Ref = element)}
-          onChangeText={value => this._handleOnChangeText('password02', value)}
+          onChangeText={value => this._handleOnChangeText('password2', value)}
         />
         <StyledButton2
           buttonRef={ref => (this.styledButton2 = ref)}
           label="Set Password"
           onPress={this.handleSetPassword}
           onSecondaryPress={() => this.styledButton2.reset()}
+        />
+        <StyledButton
+          style={{
+            height: 42,
+            backgroundColor: Colors.defaultColor.WARNING_COLOR
+          }}
+          textStyle={{ color: Colors.defaultColor.PAPER_COLOR }}
+          text="Cancel"
+          onPress={() => this.props.logout()}
         />
       </View>
     );
