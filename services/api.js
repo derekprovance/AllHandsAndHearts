@@ -139,8 +139,8 @@ export default class Api {
       .catch(err => err);
   };
 
-  completePassword = async (user, password) => {
-    return await Auth.completeNewPassword(user, password)
+  completePassword = async (user, password, attributes) => {
+    return await Auth.completeNewPassword(user, password, attributes)
       .then(user => user)
       .catch(err => err);
   };

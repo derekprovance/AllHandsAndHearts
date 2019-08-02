@@ -113,23 +113,17 @@ function* loginFlow(action) {
 
 function* setPasswordNewAccount(action) {
   //TODO(DEREK) - create success and failure enums
+  //TODO(DEREK) - handle this not being saved on resume
   //TODO(DEREK) - look into cleaning this
   try {
-    const { user, password } = action.data;
-    const auth = yield call(Api.completePassword, user, password);
+    const { user, password, attributes } = action.data;
+    const auth = yield call(Api.completePassword, user, password, attributes);
     console.log(auth);
-    if (auth && typeof auth === 'object' && auth.attributes) {
-      //TODO(DEREK) - possible place to save the security token by Amazon
-      yield put({
-        type: SET_AUTH,
-        newAuthState: true,
-        currentUserId: auth.attributes.email,
-        user: auth.attributes
-      });
-      yield put({ type: RESET_TO_MAIN });
-    }
+    //TODO(DEREK) - handle fail case
+    //TODO(DEREK) - possible place to save the security token by Amazon
+    yield put({ type: RESET_TO_LOGIN });
   } catch (e) {
-    //TODO(DEREK) - Handle fail case
+    //TODO(DEREK) - Handle dire fail case
   }
 }
 

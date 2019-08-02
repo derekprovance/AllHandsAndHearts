@@ -10,7 +10,8 @@ import { delayExec } from '../../utils/utils';
 export default class NewAccountPasswordForm extends React.PureComponent {
   state = {
     password: '',
-    password2: ''
+    password2: '',
+    name: ''
   };
 
   _handleOnChangeText = (key, value) => {
@@ -24,15 +25,19 @@ export default class NewAccountPasswordForm extends React.PureComponent {
     let { password, password2 } = this.state;
 
     if (password == password2) {
-      if (password.length > 0) {
+      if (password.length > 0 && this.state.name.length > 0) {
         this.props.setPasswordNewAccount({
           user: this.props.auth.cognitoUser,
-          password: password
+          password: password,
+          attributes: {
+            name: this.state.name
+          }
         });
       } else {
-        this.showErrorMessage('A password must be provided.');
+        this.showErrorMessage('A name and password must be provided.');
       }
     } else {
+      //TODO(DEREK) - clear passwords when they do not match
       this.showErrorMessage('Passwords do not match!');
     }
   };
@@ -47,6 +52,15 @@ export default class NewAccountPasswordForm extends React.PureComponent {
     return (
       <View style={styles.container} {...this.props}>
         <Text style={styles.link}>Set a new password for your account.</Text>
+        <StyledInput
+          style={styles.input}
+          placeholder="First and Last Name"
+          returnKeyType="next"
+          autoCorrect={false}
+          enablesReturnKeyAutomatically
+          onSubmitEditing={() => this.emailRef.focus()}
+          onChangeText={value => this._handleOnChangeText('name', value)}
+        />
         <StyledInput
           secureTextEntry
           style={styles.input}
