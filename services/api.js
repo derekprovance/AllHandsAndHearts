@@ -140,10 +140,9 @@ export default class Api {
   };
 
   completePassword = async (user, password) => {
-    console.log('simmed api call');
-    console.log(user + password);
-    // return await Auth.completeNewPassword(user, password)
-    //   .then(user => user);
+    return await Auth.completeNewPassword(user, password)
+      .then(user => user)
+      .catch(err => err);
   };
 
   changePassword = async (oldPassword, newPassword) => {

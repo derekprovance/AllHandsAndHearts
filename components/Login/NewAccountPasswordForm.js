@@ -25,9 +25,8 @@ export default class NewAccountPasswordForm extends React.PureComponent {
 
     if (password == password2) {
       if (password.length > 0) {
-        //TODO(DEREK) - pipe in email to this form
         this.props.setPasswordNewAccount({
-          email: 'test@dummy.com',
+          user: this.props.auth.cognitoUser,
           password: password
         });
       } else {

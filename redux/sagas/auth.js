@@ -84,6 +84,11 @@ function* loginFlow(action) {
     });
 
     if (auth.challengeName === 'NEW_PASSWORD_REQUIRED') {
+      yield put({
+        type: SET_AUTH,
+        newAuthState: false,
+        cognitoUser: auth
+      });
       yield put({ type: SWITCH_TO_SET_PASSWORD_NEW_ACCOUNT, setPass: true });
     } else if (auth && typeof auth === 'object' && auth.attributes) {
       //TODO(DEREK) - possible place to save the security token by Amazon
@@ -108,22 +113,24 @@ function* loginFlow(action) {
 
 function* setPasswordNewAccount(action) {
   //TODO(DEREK) - create success and failure enums
+  //TODO(DEREK) - look into cleaning this
   try {
-    const { email, password } = action.data;
-    const status = yield call(Api.completePassword, email, password);
+    const { user, password } = action.data;
+    const auth = yield call(Api.completePassword, user, password);
+    console.log(auth);
+    if (auth && typeof auth === 'object' && auth.attributes) {
+      //TODO(DEREK) - possible place to save the security token by Amazon
+      yield put({
+        type: SET_AUTH,
+        newAuthState: true,
+        currentUserId: auth.attributes.email,
+        user: auth.attributes
+      });
+      yield put({ type: RESET_TO_MAIN });
+    }
   } catch (e) {
     //TODO(DEREK) - Handle fail case
   }
-  // if (auth && typeof auth === 'object' && auth.attributes) {
-  //   //TODO(DEREK) - possible place to save the security token by Amazon
-  //   yield put({
-  //     type: SET_AUTH,
-  //     newAuthState: true,
-  //     currentUserId: auth.attributes.email,
-  //     user: auth.attributes
-  //   });
-  //   yield put({ type: RESET_TO_MAIN });
-  // }
 }
 
 function* logoutFlow() {

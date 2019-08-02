@@ -35,7 +35,8 @@ export const auth = (state = INITIAL_STATE, action) => {
         ...state,
         loggedIn: action.newAuthState,
         currentUserId: action.currentUserId,
-        user: action.user
+        user: action.user,
+        cognitoUser: action.cognitoUser
       };
     case 'SET_ACCESS_TOKEN':
       return {
