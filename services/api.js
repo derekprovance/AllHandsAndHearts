@@ -1,115 +1,210 @@
-import { SalesforceApiWrapper } from '../utils/utils';
-import { Auth } from 'aws-amplify';
-const SalesforceApi = new SalesforceApiWrapper();
+import { Auth, API } from 'aws-amplify';
+const AwsApiName = 'DisasterCrowdAPI';
 
 export default class Api {
   /**
    * Region related Apis
    */
   getRegionList = async () => {
-    return await SalesforceApi.get('/regions');
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      }
+    };
+
+    return await API.get(AwsApiName, '/regions', myInit);
   };
   getPinsListByRegion = async regionId => {
-    const queryEndpoint = `/pins/${regionId}`;
-    return await SalesforceApi.get(queryEndpoint);
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      }
+    };
+
+    const queryEndpoint = `/pins?regionId=${regionId}`;
+    return await API.get(AwsApiName, queryEndpoint, myInit);
   };
   getRegionById = async regionId => {
-    const queryEndPoint = `/getRegion/${regionId}`;
-    return await SalesforceApi.get(queryEndPoint);
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      }
+    };
+
+    const queryEndPoint = `/regions/${regionId}`;
+    return await API.get(AwsApiName, queryEndPoint, myInit);
   };
 
   setPinByRegion = async (regionId, pinData, currentUserId) => {
-    const payload = {
-      createdByUserId: currentUserId,
-      name: pinData.name,
-      sourceName: pinData.sourceName,
-      linkUrl: pinData.sourceLink,
-      regionId: regionId,
-      address: pinData.address,
-      description: pinData.description,
-      latitude: pinData.latitude,
-      longitude: pinData.longitude,
-      pinColor: pinData.pinColor ? pinData.pinColor : '',
-      pinType: pinData.pinType ? pinData.pinType.name : 'Other',
-      Id: pinData.id ? pinData.id : '',
-      pinImage: pinData.photos.length > 0 ? 'true' : 'false'
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      },
+      body: {
+        createdByUserId: currentUserId,
+        name: pinData.name,
+        sourceName: pinData.sourceName,
+        linkUrl: pinData.sourceLink,
+        regionId: regionId,
+        address: pinData.address,
+        description: pinData.description,
+        latitude: pinData.latitude,
+        longitude: pinData.longitude,
+        pinColor: pinData.pinColor ? pinData.pinColor : '',
+        pinType: pinData.pinType ? pinData.pinType.name : 'Other',
+        Id: pinData.id ? pinData.id : '',
+        pinImage: pinData.photos.length > 0 ? 'true' : 'false'
+      }
     };
-    return await SalesforceApi.post('/pins', payload);
+
+    return await API.post(AwsApiName, '/pins', myInit);
   };
   setPinPhotosById = async (pinId, photos) => {
     let uriParts = photos.uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
-    const payload = {
-      parentId: pinId,
-      attachmentId: '',
-      fileName: `${pinId}${uriParts[0]}`,
-      contentType: `image/${fileType}`,
-      base64BlobValue: photos.base64
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      },
+      body: {
+        parentId: pinId,
+        attachmentId: '',
+        fileName: `${pinId}${uriParts[0]}`,
+        contentType: `image/${fileType}`,
+        base64BlobValue: photos.base64
+      }
     };
-    return await SalesforceApi.post('/pinImage', payload);
+
+    // TODO - implement
+    return await API.post(AwsApiName, '/pinImage', myInit);
   };
 
   getPhotos = async pinId => {
-    const payload = {
-      pinId: pinId
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      },
+      body: {
+        pinId: pinId
+      }
     };
-    const res = await SalesforceApi.put('/pinImage', payload);
-    return res;
+
+    return await API.put(AwsApiName, '/pinImage', myInit);
   };
 
   deletePinById = async pinId => {
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      }
+    };
+
     const queryEndPoint = `/pins/${pinId}`;
-    SalesforceApi.delete(queryEndPoint);
+    return await API.del(AwsApiName, queryEndPoint, myInit);
   };
 
   /**
    * Activity related Apis
    */
   getActivities = async () => {
-    return await SalesforceApi.get('/activities');
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      }
+    };
+
+    return await API.get(AwsApiName, '/activities', myInit);
   };
 
   setVote = async (pinId, vote, userId) => {
-    const payload = {
-      pinId: pinId,
-      vote: vote,
-      userId: userId
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      },
+      body: {
+        pinId: pinId,
+        vote: vote,
+        userId: userId
+      }
     };
-    return await SalesforceApi.post('/vote', payload);
+
+    return await API.post(AwsApiName, '/vote', myInit);
   };
 
   getVotedPins = async userId => {
-    const queryEndpoint = `/vote/${userId}`;
-    return await SalesforceApi.get(queryEndpoint);
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      }
+    };
+
+    const queryEndpoint = `/vote`;
+    return await API.get(AwsApiName, queryEndpoint, myInit);
   };
 
   /**
    * Pin location related Apis
    */
   getPinLocationTypes = async () => {
-    return await SalesforceApi.get('/types');
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      }
+    };
+
+    return await API.get(AwsApiName, '/types', myInit);
   };
 
   /**
    * Pin related Apis
    */
   getPinsList = async () => {
-    return await SalesforceApi.get('/getPins');
-  };
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      }
+    };
 
-  /**
-   * User related Apis
-   */
-  getUserName = async userId => {
-    const queryEndPoint = `/getUserName/${userId}`;
-    return await SalesforceApi.get(queryEndPoint);
+    return await API.get(AwsApiName, '/pins', myInit);
   };
 
   /**
    * Alert related Apis
    */
   getBroadcastCards = async () => {
-    return await SalesforceApi.get('/broadcasts');
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      }
+    };
+
+    return await API.get(AwsApiName, '/broadcasts', myInit);
   };
 
   /**
@@ -164,16 +259,16 @@ export default class Api {
    * Push notification specific api
    */
   registerPushNotificationToken = async payload => {
+    let myInit = {
+      headers: {
+        Authorization: `Bearer ${(await Auth.currentSession())
+          .getIdToken()
+          .getJwtToken()}`
+      },
+      body: payload
+    };
+
     const queryEndpoint = '/notification';
-    return await SalesforceApi.put(queryEndpoint, payload);
+    return await API.put(AwsApiName, queryEndpoint, myInit);
   };
-
-  /**
-   * Get and generate Auth token
-   */
-  generateAuthToken = async () => {
-    return SalesforceApi.setToken();
-  };
-
-  getSFHelper = () => SalesforceApi;
 }
