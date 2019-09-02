@@ -21,18 +21,6 @@ export const getPinLocationTypes = async userId => {
       }
     }
   }
-  //filter out duplicate types
-  global.pinLocationTypeNames = global.pinLocationTypeNames.filter(onlyUnique);
 
-  //filter out duplicate values in global.pinLocationTypes. Only keep items in which key Name is unique
-  for (item in global.pinLocationTypes) {
-    if (
-      !global.pinLocationTypeNames.includes(
-        global.pinLocationTypes[item]['Name']
-      )
-    ) {
-      global.pinLocationTypes.splice(item);
-    }
-  }
   return uniqueTypes;
 };
