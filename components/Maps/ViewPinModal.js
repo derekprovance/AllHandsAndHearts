@@ -68,16 +68,15 @@ export default class ViewPinModal extends React.Component {
           {data.Name}
         </StyledText>
         <Separator />
-        {data &&
-          data.Address__c && (
-            <Fragment>
-              <StyledText style={styles.styledText}>ADDRESS</StyledText>
-              <StyledText selectable style={styles.styledTextValue}>
-                {data.Address__c}
-              </StyledText>
-              <Separator />
-            </Fragment>
-          )}
+        {data && data.Address__c && (
+          <Fragment>
+            <StyledText style={styles.styledText}>ADDRESS</StyledText>
+            <StyledText selectable style={styles.styledTextValue}>
+              {data.Address__c}
+            </StyledText>
+            <Separator />
+          </Fragment>
+        )}
         <StyledText style={styles.styledText}>COORDINATES</StyledText>
         <StyledText selectable style={styles.styledTextValue}>
           {coordsString}
@@ -112,14 +111,14 @@ export default class ViewPinModal extends React.Component {
             >
               PHOTOS
             </StyledText>
-            {data.photos &&
-              data.photos.length > 0 && <Gallery photos={data.photos} />}
-            {data.PinImage__c === 'true' &&
-              !data.photos && (
-                <StyledText style={styles.styledTextValue}>
-                  Loading images ...
-                </StyledText>
-              )}
+            {data.photos && data.photos.length > 0 && (
+              <Gallery photos={data.photos} />
+            )}
+            {data.PinImage__c === 'true' && !data.photos && (
+              <StyledText style={styles.styledTextValue}>
+                Loading images ...
+              </StyledText>
+            )}
           </View>
         )}
         {data.SourceName__c && (
@@ -136,7 +135,7 @@ export default class ViewPinModal extends React.Component {
             </StyledText>
           </Fragment>
         )}
-        {isOwner ? showButton : undefined }
+        {isOwner ? showButton : undefined}
       </ScrollView>
     );
   }
