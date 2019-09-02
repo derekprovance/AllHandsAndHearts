@@ -7,22 +7,14 @@ export default class Api {
    */
   getRegionList = async () => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      }
+      headers: await this.getAuthHeader()
     };
 
     return await API.get(AwsApiName, '/regions', myInit);
   };
   getPinsListByRegion = async regionId => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      }
+      headers: await this.getAuthHeader()
     };
 
     const queryEndpoint = `/pins?regionId=${regionId}`;
@@ -30,11 +22,7 @@ export default class Api {
   };
   getRegionById = async regionId => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      }
+      headers: await this.getAuthHeader()
     };
 
     const queryEndPoint = `/regions/${regionId}`;
@@ -43,11 +31,7 @@ export default class Api {
 
   setPinByRegion = async (regionId, pinData, currentUserId) => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      },
+      headers: await this.getAuthHeader(),
       body: {
         createdByUserId: currentUserId,
         name: pinData.name,
@@ -71,11 +55,7 @@ export default class Api {
     let uriParts = photos.uri.split('.');
     let fileType = uriParts[uriParts.length - 1];
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      },
+      headers: await this.getAuthHeader(),
       body: {
         parentId: pinId,
         attachmentId: '',
@@ -90,11 +70,7 @@ export default class Api {
 
   getPhotos = async pinId => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      },
+      headers: await this.getAuthHeader(),
       body: {
         pinId: pinId
       }
@@ -105,11 +81,7 @@ export default class Api {
 
   deletePinById = async pinId => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      }
+      headers: await this.getAuthHeader()
     };
 
     const queryEndPoint = `/pins/${pinId}`;
@@ -121,11 +93,7 @@ export default class Api {
    */
   getActivities = async () => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      }
+      headers: await this.getAuthHeader()
     };
 
     return await API.get(AwsApiName, '/activities', myInit);
@@ -133,11 +101,7 @@ export default class Api {
 
   setVote = async (pinId, vote, userId) => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      },
+      headers: await this.getAuthHeader(),
       body: {
         pinId: pinId,
         vote: vote,
@@ -150,11 +114,7 @@ export default class Api {
 
   getVotedPins = async userId => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      }
+      headers: await this.getAuthHeader()
     };
 
     const queryEndpoint = `/vote`;
@@ -166,11 +126,7 @@ export default class Api {
    */
   getPinLocationTypes = async () => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      }
+      headers: await this.getAuthHeader()
     };
 
     return await API.get(AwsApiName, '/types', myInit);
@@ -181,11 +137,7 @@ export default class Api {
    */
   getPinsList = async () => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      }
+      headers: await this.getAuthHeader()
     };
 
     return await API.get(AwsApiName, '/pins', myInit);
@@ -196,11 +148,7 @@ export default class Api {
    */
   getBroadcastCards = async () => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      }
+      headers: await this.getAuthHeader()
     };
 
     return await API.get(AwsApiName, '/broadcasts', myInit);
@@ -259,15 +207,19 @@ export default class Api {
    */
   registerPushNotificationToken = async payload => {
     let myInit = {
-      headers: {
-        Authorization: `Bearer ${(await Auth.currentSession())
-          .getIdToken()
-          .getJwtToken()}`
-      },
+      headers: await this.getAuthHeader(),
       body: payload
     };
 
     const queryEndpoint = '/notification';
     return await API.put(AwsApiName, queryEndpoint, myInit);
+  };
+
+  getAuthHeader = async () => {
+    return {
+      Authorization: `Bearer ${(await Auth.currentSession())
+        .getIdToken()
+        .getJwtToken()}`
+    };
   };
 }
