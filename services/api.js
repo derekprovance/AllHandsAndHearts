@@ -85,8 +85,7 @@ export default class Api {
       }
     };
 
-    // TODO - implement
-    return await API.post(AwsApiName, '/pinImage', myInit);
+    return await API.post(AwsApiName, '/pins/images', myInit);
   };
 
   getPhotos = async pinId => {
@@ -101,7 +100,7 @@ export default class Api {
       }
     };
 
-    return await API.put(AwsApiName, '/pinImage', myInit);
+    return await API.put(AwsApiName, '/pins/images', myInit);
   };
 
   deletePinById = async pinId => {
