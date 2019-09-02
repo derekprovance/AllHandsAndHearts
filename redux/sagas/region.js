@@ -77,12 +77,10 @@ function* getPinsByRegion(action) {
 }
 
 function* setPinDataByRegion(action) {
-  const state = yield select(getState);
   const newPin = yield call(
     Api.setPinByRegion,
     action.regionId,
-    action.pinData,
-    state.auth.user.Id
+    action.pinData
   );
 
   if (newPin && newPin.Id && action.pinData.photos.length > 0) {

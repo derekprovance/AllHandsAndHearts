@@ -1,5 +1,6 @@
 import { Auth, API } from 'aws-amplify';
 const AwsApiName = 'DisasterCrowdAPI';
+var userName;
 
 export default class Api {
   /**
@@ -29,11 +30,11 @@ export default class Api {
     return await API.get(AwsApiName, queryEndPoint, myInit);
   };
 
-  setPinByRegion = async (regionId, pinData, currentUserId) => {
+  setPinByRegion = async (regionId, pinData) => {
     let myInit = {
       headers: await this.getAuthHeader(),
       body: {
-        createdByUserId: currentUserId,
+        createdByUserId: await this.getUsername(),
         name: pinData.name,
         sourceName: pinData.sourceName,
         linkUrl: pinData.sourceLink,
@@ -99,13 +100,13 @@ export default class Api {
     return await API.get(AwsApiName, '/activities', myInit);
   };
 
-  setVote = async (pinId, vote, userId) => {
+  setVote = async (pinId, vote) => {
     let myInit = {
       headers: await this.getAuthHeader(),
       body: {
         pinId: pinId,
         vote: vote,
-        userId: userId
+        userId: await this.getUsername()
       }
     };
 
@@ -221,5 +222,13 @@ export default class Api {
         .getIdToken()
         .getJwtToken()}`
     };
+  };
+
+  getUsername = async () => {
+    if (userName == undefined) {
+      userName = (await Auth.currentAuthenticatedUser()).attributes.email;
+    }
+
+    return userName;
   };
 }

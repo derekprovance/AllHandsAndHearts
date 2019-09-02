@@ -43,13 +43,7 @@ function* getActivityCards() {
 }
 
 function* setActivityVote(action) {
-  const state = yield select(getState);
-  const newVotedPins = yield call(
-    setVote,
-    action.pinId,
-    action.vote,
-    state.auth.user.Id
-  );
+  const newVotedPins = yield call(setVote, action.pinId, action.vote);
 
   if (newVotedPins) {
     yield put({
@@ -60,8 +54,7 @@ function* setActivityVote(action) {
 }
 
 function* getVotedActivities() {
-  const state = yield select(getState);
-  const votedPins = yield call(getVotedPins, state.auth.user.Id);
+  const votedPins = yield call(getVotedPins);
 
   if (votedPins) {
     yield put({

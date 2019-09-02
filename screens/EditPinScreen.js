@@ -17,7 +17,6 @@ import { StyledText } from '../components/StyledText';
 import StyledButton from '../components/StyledButton';
 import StyledInput from '../components/StyledInput';
 import { Feather as Icon } from '@expo/vector-icons';
-import Layout from '../constants/Layout';
 import TouchableNativeFeedback from '@expo/react-native-touchable-native-feedback-safe';
 import Gallery from '../components/Maps/PinImageGallery';
 
