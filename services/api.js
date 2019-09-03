@@ -1,6 +1,6 @@
 import { Auth, API } from 'aws-amplify';
 const AwsApiName = 'DisasterCrowdAPI';
-var userName;
+var userName = 'a3i170000002F0yAAE'; //TODO - test value, needs to be removed
 
 export default class Api {
   /**
