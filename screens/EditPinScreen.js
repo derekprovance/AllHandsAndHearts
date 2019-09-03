@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { Constants, ImagePicker, Permissions } from 'expo';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import LabelSelect from 'react-native-label-select';
 import { Location } from 'expo';
 import Colors from '../constants/Colors';
 import { StyledText } from '../components/StyledText';
